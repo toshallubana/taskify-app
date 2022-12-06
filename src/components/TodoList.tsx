@@ -17,33 +17,37 @@ const Todolist: React.FC<Props> = ({ todos, setTodos, completedTodos, setComplet
         <div className='container'>
             <Droppable droppableId='TodosList'> 
                 {
-                    (provided) => (
-                        <div className='todos' 
+                    (provided,snapshot) => (
+                        <div 
+                            className={`todos ${snapshot.isDraggingOver ? "dragactive" : ""}`}
                             ref={provided.innerRef} 
-                            {...provided.droppableProps}>
+                            {...provided.droppableProps}
+                        >
                             <span className='todos__heading'>
                                 Active Tasks
                             </span>
-                            {todos.map((todo, index) => (
+                            {todos?.map((todo, index) => (
                                 <SingleTodo 
                                     index={index}
                                     todo={todo} 
                                     key={todo.id} 
-                                    todos={todos} setTodos={setTodos} 
+                                    todos={todos} 
+                                    setTodos={setTodos} 
                                 />
                             ))}
+                            {provided.placeholder}
                         </div>
                     )
                 }
-                
             </Droppable>
             <Droppable droppableId='TodosRemove'> 
                 {
-                    (provided) => (
+                    (provided, snapshot) => (
                         <div 
-                        className='todos remove' 
-                        ref={provided.innerRef} 
-                        {...provided.droppableProps}>
+                            className={`todos remove ${snapshot.isDraggingOver ? "dragcomplete" : ""}`} 
+                            ref={provided.innerRef} 
+                            {...provided.droppableProps}
+                        >
                             <span className='todos__heading'>
                                 Completed Tasks
                             </span>
@@ -56,6 +60,7 @@ const Todolist: React.FC<Props> = ({ todos, setTodos, completedTodos, setComplet
                                     setTodos={setCompletedTodos} 
                                 />
                             ))}
+                            {provided.placeholder}
                         </div>
                     )
                 }
